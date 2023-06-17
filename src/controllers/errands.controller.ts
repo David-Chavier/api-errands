@@ -51,9 +51,9 @@ export class ErrandsController {
         );
       }
 
-      if (archived != null) {
+      if (archived) {
         filteredErrands = errands.filter(
-          (errand) => errand.archived === Boolean(archived)
+          (errand) => errand.archived === archived
         );
       }
 

@@ -3,7 +3,7 @@ import { users } from "../database/users";
 
 export class Errand {
   private _id: string;
-  private _archived: boolean;
+  private _archived: string;
 
   constructor(
     private _description: string,
@@ -11,7 +11,7 @@ export class Errand {
     private _userId: string
   ) {
     this._id = createUuid();
-    this._archived = false;
+    this._archived = "false";
   }
 
   public get id() {
@@ -34,7 +34,7 @@ export class Errand {
     return this._userId;
   }
 
-  public set archived(archived: boolean) {
+  public set archived(archived: string) {
     this._archived = archived;
   }
 
