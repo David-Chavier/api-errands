@@ -39,6 +39,7 @@ export class UserController {
       return res.status(200).send({
         ok: true,
         message: "user was create successfully created",
+        data: user.userId,
       });
     } catch (err: any) {
       return res.status(500).send({
