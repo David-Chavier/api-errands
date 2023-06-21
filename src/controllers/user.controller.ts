@@ -17,9 +17,11 @@ export class UserController {
           .send({ ok: false, message: "invalid username or password" });
       }
 
-      res
-        .status(200)
-        .send({ ok: true, message: "logged in user", data: userValidation });
+      res.status(200).send({
+        ok: true,
+        message: "logged in user",
+        data: userValidation.toJson(),
+      });
     } catch (err: any) {
       return res.status(500).send({
         ok: false,
@@ -34,7 +36,7 @@ export class UserController {
       const user = new User(username, password);
       users.push(user);
 
-      res.status(200).send({
+      return res.status(200).send({
         ok: true,
         message: "user was create successfully created",
       });

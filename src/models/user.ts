@@ -31,7 +31,6 @@ export class User {
     return {
       id: this._userId,
       username: this.username,
-      password: this.password,
     };
   }
 }
