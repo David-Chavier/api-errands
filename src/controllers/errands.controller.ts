@@ -23,7 +23,9 @@ export class ErrandsController {
       res.status(200).send({
         ok: true,
         message: "Errand was successfully add",
-        data: errands[errands.length - 1].toJson(),
+        data: errands
+          .filter((errand) => errand.userId === userid)
+          .map((errand) => errand.toJson()),
       });
     } catch (err: any) {
       res.status(500).send({ ok: false, message: err.toString() });
