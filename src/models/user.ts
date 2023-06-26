@@ -29,7 +29,7 @@ export class User {
 
   public toJson() {
     return {
-      id: this._userId,
+      userId: this._userId,
       username: this.username,
     };
   }

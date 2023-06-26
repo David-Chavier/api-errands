@@ -51,10 +51,10 @@ export class Errand {
 
   public toJson() {
     return {
-      id: this.id,
+      errandId: this.id,
       description: this.description,
       details: this.details,
-      archived: this.archived,
+      isArchived: this.archived,
     };
   }
 }

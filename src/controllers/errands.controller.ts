@@ -8,6 +8,7 @@ export class ErrandsController {
     try {
       const { userid } = req.params;
       const { description, details } = req.body;
+      const { isArchived } = req.query;
 
       const user = users.find((user) => user.userId === userid);
 
@@ -20,10 +21,18 @@ export class ErrandsController {
 
       errands.push(new Errand(description, details, userid));
 
+      let filteredErrands = errands;
+
+      if (isArchived) {
+        filteredErrands = errands.filter(
+          (errand) => errand.archived === isArchived
+        );
+      }
+
       res.status(200).send({
         ok: true,
         message: "Errand was successfully add",
-        data: errands
+        data: filteredErrands
           .filter((errand) => errand.userId === userid)
           .map((errand) => errand.toJson()),
       });
@@ -35,7 +44,7 @@ export class ErrandsController {
   public list(req: Request, res: Response) {
     try {
       const { userid } = req.params;
-      const { description, archived } = req.query;
+      const { description, isArchived } = req.query;
 
       const user = users.find((user) => user.userId === userid);
 
@@ -53,9 +62,9 @@ export class ErrandsController {
         );
       }
 
-      if (archived) {
+      if (isArchived) {
         filteredErrands = errands.filter(
-          (errand) => errand.archived === archived
+          (errand) => errand.archived === isArchived
         );
       }
 
@@ -73,8 +82,8 @@ export class ErrandsController {
   public update(req: Request, res: Response) {
     try {
       const { userid, errandid } = req.params;
-
-      const { description, details, archived } = req.body;
+      const { description, details, archive } = req.body;
+      const { isArchived } = req.query;
 
       const user = users.find((user) => user.userId === userid);
 
@@ -92,14 +101,24 @@ export class ErrandsController {
           .send({ ok: false, message: "Errand was not found" });
       }
 
-      errand.archived = archived ?? errand.archived;
+      errand.archived = archive ?? errand.archived;
       errand.details = details ?? errand.details;
       errand.description = description ?? errand.description;
+
+      let filteredErrands = errands;
+
+      if (isArchived) {
+        filteredErrands = errands.filter(
+          (errand) => errand.archived === isArchived
+        );
+      }
 
       res.status(200).send({
         ok: true,
         message: "Errand was successfully update",
-        data: errand.toJson(),
+        data: filteredErrands
+          .filter((errand) => errand.userId === userid)
+          .map((errand) => errand.toJson()),
       });
     } catch (err: any) {
       res.status(500).send({ ok: false, message: err.toString() });
@@ -131,7 +150,9 @@ export class ErrandsController {
       res.status(200).send({
         ok: true,
         message: "Errand was successfully delete",
-        data: deletedErrand[0].toJson(),
+        data: errands
+          .filter((errand) => errand.userId === userid)
+          .map((errand) => errand.toJson()),
       });
     } catch (err: any) {
       res.status(500).send({ ok: false, message: err.toString() });
