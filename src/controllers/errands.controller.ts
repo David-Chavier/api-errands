@@ -128,6 +128,7 @@ export class ErrandsController {
   public delete(req: Request, res: Response) {
     try {
       const { userid, errandid } = req.params;
+      const { isArchived } = req.query;
 
       const user = users.find((user) => user.userId === userid);
 
@@ -147,10 +148,18 @@ export class ErrandsController {
 
       const deletedErrand = errands.splice(errand, 1);
 
+      let filteredErrands = errands;
+
+      if (isArchived) {
+        filteredErrands = errands.filter(
+          (errand) => errand.archived === isArchived
+        );
+      }
+
       res.status(200).send({
         ok: true,
         message: "Errand was successfully delete",
-        data: errands
+        data: filteredErrands
           .filter((errand) => errand.userId === userid)
           .map((errand) => errand.toJson()),
       });
